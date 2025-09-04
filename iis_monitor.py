@@ -62,7 +62,7 @@ def test_https_connection(hostname, port=443):
         import urllib.request
         import urllib.error
         
-        url = f"https://{hostname}:{port}"
+        url = f"https://{hostname}"
         req = urllib.request.Request(url, method='HEAD')
         
         with urllib.request.urlopen(req, timeout=10) as response:
@@ -78,11 +78,12 @@ def test_https_connection(hostname, port=443):
 def toggle_sni_setting(site_name, binding_info, current_sni_flag):
     """Toggle SNI setting for a specific binding"""
     # Extract IP and port from binding
+
     parts = binding_info.split(':')
     if len(parts) >= 2:
         ip = parts[0] if parts[0] else "*"
         port = parts[1]
-        hostname = parts[2] if len(parts) > 2 else ""
+        site_name = parts[2] if len(parts) > 2 else ""
         
         # Toggle SNI flag (1 = SNI required, 0 = SNI not required)
         new_sni_flag = 0 if current_sni_flag == 1 else 1
