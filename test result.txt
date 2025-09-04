@@ -1,0 +1,29 @@
+Site: None
+   Protocol: http
+   Binding : 43.252.213.220:80:qr.novax-intl.com
+   SSLFlags: 0 (SNI=No)
+   🔒 SSL Status: OK
+   Expiry   : 2026-05-14 23:59:59
+   Remaining: 252 days
+Site: None
+   Protocol: http
+   Binding : 43.252.213.220:80:qr.novax-intl.com
+   SSLFlags: 0 (SNI=No)
+   🔒 SSL Status: OK
+   Expiry   : 2026-05-14 23:59:59
+   Remaining: 252 days
+
+🌐 Site: None
+   Protocol: https
+   Binding : 43.252.213.220:443:qr.novax-intl.com
+   SSLFlags: 1 (SNI=Yes)
+   🔒 SSL Status: OK
+   Expiry   : 2026-05-14 23:59:59
+   Remaining: 252 days
+🌐 Site: None
+   Protocol: https
+   Binding : 43.252.213.220:443:qr.novax-intl.com
+   SSLFlags: 1 (SNI=Yes)
+   🔒 SSL Status: OK
+   Expiry   : 2026-05-14 23:59:59
+   Remaining: 252 days
