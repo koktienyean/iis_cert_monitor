@@ -147,7 +147,7 @@ def check_ssl_certificate(hostname, port=443):
 
 if __name__ == "__main__":
     all_sites = get_iis_sites()
-    selected_sites = [s for s in all_sites if any(site in s['Binding'] for site in MONITOR_SITES)]
+    selected_sites = [s for s in all_sites if any(site in s['Binding'] for site in MONITOR_SITES) and s['Protocol'].lower() == 'https']
 
     if not selected_sites:
         print("⚠️ No matching sites found in IIS for your monitor list.")
