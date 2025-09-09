@@ -45,8 +45,19 @@ def get_iis_sites():
         text=True
     )
     if process.returncode != 0:
-        raise Exception(f"Error: {process.stderr}")
-    return json.loads(process.stdout)
+        raise Exception(f"PowerShell Error: {process.stderr}")
+    
+    if not process.stdout.strip():
+        raise Exception("PowerShell returned empty output")
+    
+    try:
+        result = json.loads(process.stdout)
+        # Ensure result is always a list
+        if not isinstance(result, list):
+            result = [result] if result else []
+        return result
+    except json.JSONDecodeError as e:
+        raise Exception(f"Failed to parse PowerShell JSON output: {e}")
 
 
 def extract_hostname(binding_info: str):
