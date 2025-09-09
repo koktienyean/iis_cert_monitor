@@ -27,3 +27,5 @@ Site: None
    🔒 SSL Status: OK
    Expiry   : 2026-05-14 23:59:59
    Remaining: 252 days
+
+   powershell -Command "Get-Module -ListAvailable WebAdministration"
