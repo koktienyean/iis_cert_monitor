@@ -2,6 +2,7 @@ import subprocess
 import json
 import ssl
 import socket
+import time
 from datetime import datetime
 
 # Pick which IIS sites to monitor
@@ -146,7 +147,10 @@ def check_ssl_certificate(hostname, port=443):
         return {"hostname": hostname, "status": f"Connection Failed: {e}"}
 
 
-if __name__ == "__main__":
+def run_monitoring_check():
+    """Run a single monitoring check"""
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Starting SSL certificate monitoring check...")
+    
     all_sites = get_iis_sites()
     selected_sites = [s for s in all_sites if any(site in s['Binding'] for site in MONITOR_SITES) and s['Protocol'].lower() == 'https']
 
@@ -196,3 +200,18 @@ if __name__ == "__main__":
             else:
                 print("   ⚠️ No hostname found in binding (might be IP-only)")
             print()
+    
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Monitoring check completed.\n")
+
+
+if __name__ == "__main__":
+    print("🔍 IIS SSL Certificate Monitor - Starting continuous monitoring (every 1 hour)")
+    print("Press Ctrl+C to stop monitoring\n")
+    
+    try:
+        while True:
+            run_monitoring_check()
+            print("⏰ Next check in 1 hour...")
+            time.sleep(3600)  # Sleep for 1 hour (3600 seconds)
+    except KeyboardInterrupt:
+        print("\n👋 Monitoring stopped by user. Goodbye!")
