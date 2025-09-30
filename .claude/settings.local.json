@@ -6,7 +6,8 @@
       "Read(/C:\\_PYTHON\\iis_cert_monitor/**)",
       "Read(/C:\\_PYTHON\\iis_cert_monitor/**)",
       "Read(/C:\\_PYTHON\\iis_cert_monitor/**)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []

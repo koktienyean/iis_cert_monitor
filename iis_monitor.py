@@ -11,45 +11,30 @@ MONITOR_SITES = ["qr.novax-intl.com"]
 
 def get_iis_sites():
     """Get IIS site bindings and SSL details from PowerShell"""
-    ps_script = r"""
-    Import-Module WebAdministration
-    $bindings = Get-WebBinding | Select-Object protocol, bindingInformation, certificateHash, certificateStoreName, sslFlags, siteName
-    $result = @()
-    foreach ($b in $bindings) {
-        $cert = $null
-        if ($b.certificateHash) {
-            $certObj = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Thumbprint -eq $b.certificateHash }
-            if ($certObj) {
-                $cert = @{
-                    Subject = $certObj.Subject
-                    Expiry  = $certObj.NotAfter
-                    Issuer  = $certObj.Issuer
-                    Thumbprint = $certObj.Thumbprint
-                }
-            }
-        }
-        $result += @{
-            Site       = $b.siteName
-            Protocol   = $b.protocol
-            Binding    = $b.bindingInformation
-            Store      = $b.certificateStoreName
-            SSLFlags   = $b.sslFlags
-            Certificate= $cert
-        }
-    }
-    $result | ConvertTo-Json -Depth 5
-    """
+    import os
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    ps_script_path = os.path.join(script_dir, "get_iis_bindings.ps1")
+
     process = subprocess.run(
-        ["powershell", "-Command", ps_script],
+        ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps_script_path],
         capture_output=True,
-        text=True
+        text=True,
+        timeout=30
     )
+
+    # Debug: Print raw output
+    print("DEBUG - PowerShell stdout:")
+    print(repr(process.stdout))
+    print("\nDEBUG - PowerShell stderr:")
+    print(repr(process.stderr))
+    print(f"\nDEBUG - Return code: {process.returncode}\n")
+
     if process.returncode != 0:
         raise Exception(f"PowerShell Error: {process.stderr}")
-    
+
     if not process.stdout.strip():
         raise Exception("PowerShell returned empty output")
-    
+
     try:
         result = json.loads(process.stdout)
         # Ensure result is always a list
